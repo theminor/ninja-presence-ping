@@ -1,4 +1,5 @@
 var Presence = require('ninja-presence-base');
+var wifiLocation = require('wifi_location');
 
 module.exports = Presence;
 
