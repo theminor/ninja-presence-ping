@@ -69,7 +69,7 @@ Presence.prototype.config = function(rpc,cb) {
   var self = this;
   
 	if (!rpc) {
-		var loggingToggle = "Turn logging " +(self._opts.logging)?"Off":"On";
+		var loggingToggle = (self._opts.logging)?"Turn Logging Off":"Turn Logging On"; // shows opposite of the current setting
 		return cb(null,{"contents":[
 			{ "type": "paragraph", "text": "Welcome to the Ping Presence driver!"},
 			{ "type": "submit", "name": "General Settings", "rpc_method": "genSettings" },
@@ -135,7 +135,7 @@ Presence.prototype.config = function(rpc,cb) {
     case 'toggleLogging':
     	self._opts.logging = !self._opts.logging;
     	self.save();
-    	var loggingToggle = "Logging to the ninjablocks log turned " + (self._opts.logging)?"On":"Off"
+    	var loggingToggle = (self._opts.logging)?"Ninja Presence Ping Logging is now turned On":"Ninja Presence Ping Logging is now turned Off"
     	cb(null, {
     		"contents": [
     			{ "type":"paragraph", "text":loggingToggle},
