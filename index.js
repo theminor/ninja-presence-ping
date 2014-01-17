@@ -22,16 +22,18 @@ Presence.prototype.init = function() {
 	this._opts.logging = this._opts.logging || true; //Logging is on by default
 	
 	//Print current settings.
-	this._app.log.info('Ping => Hosts: ',this._opts.hosts);
-	this._app.log.info('Ping => Scan delay: '+this._opts.scanDelay);
-	this._app.log.info('Ping => Timeout: '+this._opts.timeout);
+	if (this._opts.logging) {
+		this._app.log.info('Ping => Hosts: ',this._opts.hosts);
+		this._app.log.info('Ping => Scan delay: '+this._opts.scanDelay);
+		this._app.log.info('Ping => Timeout: '+this._opts.timeout);
+	};
 	
 }
 
 Presence.prototype.scan = function() {
   
   var self = this;
-  self._app.log.info('Ping => Start pinging hosts');
+  if (this._opts.logging) { self._app.log.info('Ping => Start pinging hosts'); };
   for(var ip in self._opts.hosts) {
   	var host = self._opts.hosts[ip];
   	self.pingHost(host);
@@ -46,10 +48,10 @@ Presence.prototype.scan = function() {
 //Here we ping the host. Host is an object with a name and an ipaddress
 Presence.prototype.pingHost = function(host){
 	var self = this;
-	self._app.log.info('Ping => Ping host: ', host);
+	if (this._opts.logging) { self._app.log.info('Ping => Ping host: ', host); };
 	self._ping.sys.probe(host.ip,function(isAlive) {
   		if(isAlive) {
-  			self._app.log.info('Ping => ' + host.name +' is up.');
+  			if (this._opts.logging) { self._app.log.info('Ping => ' + host.name +' is up.'); };
   			self.see({
   				name : host.name,
   				id : host.ip.replace('.','_'),
@@ -79,7 +81,7 @@ Presence.prototype.config = function(rpc,cb) {
 		]});
 	}
 	
-	self._app.log.info('Settings', rpc.method, rpc);
+	if (this._opts.logging) { self._app.log.info('Settings', rpc.method, rpc); };
 	
 	switch (rpc.method) {
 		case 'addModal':
@@ -117,7 +119,7 @@ Presence.prototype.config = function(rpc,cb) {
       });
       break;
   	case 'saveSettings':
-      self._app.log.info('New scandelay '+rpc.params.scanDelay+' and timeout '+rpc.params.timeout);
+      if (this._opts.logging) { self._app.log.info('New scandelay '+rpc.params.scanDelay+' and timeout '+rpc.params.timeout); };
       self._opts.scanDelay = (rpc.params.scanDelay *1000);
       self._opts.timeout = (rpc.params.timeout *1000);
       self.save();
